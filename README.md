@@ -6,6 +6,8 @@ This Python package implements the LeAP-SSN (Levenberg Marquardt Adaptive Proxim
 
 "A semismooth Newton method with global convergence rates", A. Alphonse, P. Dvurechensky, I. P. A. Papadopoulos, C. Sirotenko (2025), [arXiv](FIXME).
 
+Use the flag --plot to generate the figures.
+
 |Figure|File: examples/|
 |:-:|:-:|
 |2|[signorini.py](https://github.com/amal-alphonse/leapssn/blob/main/examples/signorini.py)|

@@ -3,6 +3,7 @@ from firedrake import *
 from leapssn import *
 from collections import defaultdict
 import matplotlib.pyplot as plt
+import argparse
 
 """
 Signorini contact problem of Section 7.1.
@@ -68,6 +69,10 @@ class SignoriniProblem(FiredrakeLeapSSN):
 
     
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--plot", action="store_true",)
+
     mesh = RectangleMesh(300, 40, 5, 1)
     problem=SignoriniProblem(mesh, Constant(1e3))
     u = Function(problem.V)
@@ -117,7 +122,8 @@ if __name__ == "__main__":
     print("LeAP SSN linear system solves: %s" %(signorini_prox_history["linear_system_solves"]))
 
     ## Plotting
-    if False:
+    args = parser.parse_args()
+    if args.plot:
         plt.rcParams.update({"text.usetex": True,"font.family": "serif","font.serif": ["Computer Modern Roman"],})
         plt.close()
         gs = ["10^3", "10^4", "10^5", "10^6"]
@@ -132,18 +138,22 @@ if __name__ == "__main__":
         plt.yscale('log')
         plt.xlabel(r"$k$", fontsize=20)
         plt.ylabel(r"$F(u_k)-F^*$", fontsize=20)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
         plt.grid(True)
-        plt.legend(loc='lower center', bbox_to_anchor=(0.7, 0.05))
+        plt.legend(loc='lower center', bbox_to_anchor=(0.7, 0.05), fontsize=12)
         plt.tight_layout()
         plt.savefig("signorini_convergence.pdf")
 
         problem.gamma.assign(1e6)
         u.assign(0)
         problem.leapssn(u, proximal_parameters)
+        E = 200.0
+        nu = 0.3
+        lmbda_  = (E*nu)/((1+nu)*(1-2*nu))
+        mu_ = E/(2*(1+nu))
         def sigma(u):
-            return lmbda_*tr(epsilon(u))*Identity(2) + 2.0*mu_*epsilon(u)
+            return lmbda_*tr(problem.epsilon(u))*Identity(2) + 2.0*mu_*problem.epsilon(u)
         W = TensorFunctionSpace(mesh, "CG", 1)
         stress = project(sigma(u), W, name="Stress")
         VTKFile("signorini_sol.pvd").write(u, stress)
@@ -153,6 +163,6 @@ if __name__ == "__main__":
         V = VectorFunctionSpace(mesh, "Lagrange", 1)
         ob = Function(V)
         def obstacle_v():
-            return as_vector([0,obstacle(x)[1]-width])
+            return as_vector([0,problem.obstacle(x)[1]-width])
         ob.interpolate(obstacle_v())
         VTKFile("signorini_obstacle.pvd").write(ob)

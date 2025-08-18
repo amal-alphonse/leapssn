@@ -5,6 +5,7 @@ import numpy as np
 from skimage.transform import rescale
 from skimage.data import shepp_logan_phantom
 from scipy.interpolate import RegularGridInterpolator
+import argparse
 
 """
 Image restoration problem of Section 7.2.
@@ -108,6 +109,9 @@ class ImageProblemCG(ImageProblem):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--plot", action="store_true",)
+
     nx, ny = 400, 400 # pixels in x and y-direction
     alpha = 1e-4 # parameter for BV-norm in primal problem
     epsilon = Constant(0)  # parameter for L^2-norm regularisation
@@ -165,7 +169,8 @@ if __name__ == "__main__":
     print("LeAP SSN linear system solves: %s" %(image_prox_history["linear_system_solves"]))
 
     # Plotting
-    if False:
+    args = parser.parse_args()
+    if args.plot:
         outfile = VTKFile("image_restoration.pvd")
         U = FunctionSpace(mesh, "DQ", 0)
         h = Function(U)

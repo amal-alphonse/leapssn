@@ -2,6 +2,7 @@ from leapssn import *
 import numpy as np
 from sklearn.datasets import make_classification
 import matplotlib.pyplot as plt
+import argparse
 
 """
 Support vector classification problem of Section 7.3.
@@ -60,6 +61,8 @@ class SupportVectorClassification(LeapSSN):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--plot", action="store_true",)
     # Generate a classification set with vectors of size n
     def generate_data(n):
         if n == 2:
@@ -96,12 +99,14 @@ if __name__ == "__main__":
 
     print(svc_history)
     # Plotting
-    if False:
+    args = parser.parse_args()
+    if args.plot:
         x,y = generate_data(2)
         C = 1e2
         svc = SupportVectorClassification(x,y,C)
         w_k, iters = svc.prox_solve()
 
+        x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
         xx = np.linspace(x_min, x_max)
         yy =  -(w_k[0] * xx + w_k[2]) / w_k[1]
 
@@ -112,5 +117,8 @@ if __name__ == "__main__":
 
         plt.xlabel(r"$x_1$", fontsize=20)
         plt.ylabel(r"$x_2$", fontsize=20)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
         plt.grid(True)
+        plt.tight_layout()
         plt.savefig("svc_sol.pdf")
