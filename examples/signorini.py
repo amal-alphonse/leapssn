@@ -131,10 +131,15 @@ if __name__ == "__main__":
         for i in range(4):
             x = signorini_prox_history["objective_value"][i] - signorini_prox_history["objective_value"][i][-1]
             plt.plot(range(1,len(x)-1), x[1:-1], "%s-"%(ms[i]), label=r"$\gamma=%s$"%(gs[i]))
+
         D_0 = norm(signorini_prox_history["iterates"][3][-1], "H1")
-        lmbda_prod = np.prod(signorini_prox_history["accepted_lmbda_value"][3])**(1/len(signorini_prox_history["accepted_lmbda_value"][3]))
-        y = np.array(4*lmbda_prod*D_0**2) / range(1,len(x)-1) #+ dnorm * D_0 * np.exp(- np.array(range(1,len(x)-1)) / 4)
-        plt.plot(range(1,len(x)-1), y, "--", label=r"$4 (\Pi_{j=0}^{93} \lambda_j)^{1/94} \Vert u^* \Vert^2_{H^1}/ k $")
+        lmbdas = signorini_prox_history["accepted_lmbda_value"][3]
+        lmbda_prod = []
+        for j in range(len(lmbdas)):
+            lmbda_prod.append(np.prod(lmbdas[0:j])**(1/(j+1)))
+
+        y = np.array(4*D_0**2)  * lmbda_prod / range(1,len(x)) #+ dnorm * D_0 * np.exp(- np.array(range(1,len(x)-1)) / 4)
+        plt.plot(range(1,len(x)-1), y[0:-1], "--", label=r"$4 (\Pi_{j=0}^{k-1} \lambda_j)^{1/k} \Vert u^* \Vert^2_{H^1}/ k $")
         plt.yscale('log')
         plt.xlabel(r"$k$", fontsize=20)
         plt.ylabel(r"$F(u_k)-F^*$", fontsize=20)
