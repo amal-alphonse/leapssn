@@ -2,7 +2,7 @@
 
 ### Synopsis ###
 
-This Python package implements the LeAP-SSN (Levenberg Marquardt Adaptive Proximal semismooth Newton method) algorithm described in
+This Python package implements the LeAP-SSN (<ins>Le</ins>venberg–Marquardt <ins>A</ins>daptive <ins>P</ins>roximal <ins>S</ins>emi<ins>s</ins>mooth <ins>N</ins>ewton method) algorithm described in
 
 "A semismooth Newton method with global convergence rates", A. Alphonse, P. Dvurechensky, I. P. A. Papadopoulos, C. Sirotenko (2025), [arXiv](FIXME).
 
