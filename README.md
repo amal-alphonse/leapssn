@@ -4,7 +4,7 @@
 
 This Python package implements the LeAP-SSN (<ins>Le</ins>venberg–Marquardt <ins>A</ins>daptive <ins>P</ins>roximal <ins>S</ins>emi<ins>s</ins>mooth <ins>N</ins>ewton method) algorithm described in
 
-"A semismooth Newton method with global convergence rates", A. Alphonse, P. Dvurechensky, I. P. A. Papadopoulos, C. Sirotenko (2025), [arXiv](FIXME).
+"LeAP-SSN: a semismooth Newton method with global convergence rates", A. Alphonse, P. Dvurechensky, I. P. A. Papadopoulos, C. Sirotenko (2025), [arXiv](https://arxiv.org/abs/2508.16468).
 
 Use the flag --plot to generate the figures.
 
